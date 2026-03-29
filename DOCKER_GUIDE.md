@@ -4,16 +4,18 @@ Configuración completa de Docker con Docker Compose para ejecutar el proyecto c
 
 ## 📋 Requisitos Previos
 
-- Docker Desktop (Windows/Mac) o Docker Engine (Linux)
-- Docker Compose (incluido en Docker Desktop)
+* Docker Desktop (Windows/Mac) o Docker Engine (Linux)
+* Docker Compose (incluido en Docker Desktop)
 
 ### Instalación de Docker
 
 **Windows/Mac:**
-- Descargar [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- Instalar y reiniciar
+
+* Descargar [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+* Instalar y reiniciar
 
 **Linux (Ubuntu/Debian):**
+
 ```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
@@ -21,6 +23,7 @@ sudo apt install docker-compose
 ```
 
 Verificar instalación:
+
 ```bash
 docker --version
 docker-compose --version
@@ -28,14 +31,14 @@ docker-compose --version
 
 ## 🚀 Inicio Rápido
 
-### 1. Clonar el repositorio
+### 1\. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/dashboard-financiero.git
+git clone https://github.com/gilmarinsebastiandavid-ship-it/Dashboard-finanzasV2.git
 cd dashboard-financiero
 ```
 
-### 2. Estructura de archivos Docker
+### 2\. Estructura de archivos Docker
 
 Asegúrate de tener esta estructura:
 
@@ -57,23 +60,25 @@ dashboard-financiero/
     └── package.json
 ```
 
-### 3. Configurar variables de entorno
+### 3\. Configurar variables de entorno
 
 Copia el archivo de ejemplo:
+
 ```bash
 cp .env.docker .env
 ```
 
 Edita `.env` si necesitas cambiar puertos o contraseñas:
+
 ```env
-DB_PASSWORD=postgres123
-FRONTEND_PORT=8000
-BACKEND_PORT=3001
-POSTGRES_PORT=5432
-REACT_APP_API_URL=http://localhost:3001/api
+DB\_PASSWORD=postgres123
+FRONTEND\_PORT=8000
+BACKEND\_PORT=3001
+POSTGRES\_PORT=5432
+REACT\_APP\_API\_URL=http://localhost:3001/api
 ```
 
-### 4. Construir y ejecutar
+### 4\. Construir y ejecutar
 
 ```bash
 # Construir las imágenes y levantar los contenedores
@@ -85,11 +90,11 @@ docker-compose up --build -d
 
 **Tiempo estimado:** 3-5 minutos la primera vez
 
-### 5. Acceder a la aplicación
+### 5\. Acceder a la aplicación
 
-- **Frontend:** http://localhost:8000
-- **Backend API:** http://localhost:3001/api/health
-- **PostgreSQL:** localhost:5432
+* **Frontend:** http://localhost:8000
+* **Backend API:** http://localhost:3001/api/health
+* **PostgreSQL:** localhost:5432
 
 ## 🎯 Comandos Útiles
 
@@ -153,7 +158,7 @@ docker-compose build frontend
 docker-compose exec backend sh
 
 # Acceder a PostgreSQL
-docker-compose exec postgres psql -U postgres -d finanzas_db
+docker-compose exec postgres psql -U postgres -d finanzas\_db
 
 # Ver logs del backend
 docker-compose exec backend cat /app/logs/app.log
@@ -175,22 +180,23 @@ services:
     build: ./backend
     volumes:
       - ./backend:/app
-      - /app/node_modules
+      - /app/node\_modules
     environment:
-      NODE_ENV: development
+      NODE\_ENV: development
     command: npm run dev
 
   frontend:
     build: ./frontend
     volumes:
       - ./frontend:/app
-      - /app/node_modules
+      - /app/node\_modules
     environment:
-      NODE_ENV: development
+      NODE\_ENV: development
     command: npm start
 ```
 
 Ejecutar:
+
 ```bash
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
@@ -201,27 +207,27 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 ```bash
 # Crear backup
-docker-compose exec postgres pg_dump -U postgres finanzas_db > backup.sql
+docker-compose exec postgres pg\_dump -U postgres finanzas\_db > backup.sql
 
 # O con fecha
-docker-compose exec postgres pg_dump -U postgres finanzas_db > backup_$(date +%Y%m%d).sql
+docker-compose exec postgres pg\_dump -U postgres finanzas\_db > backup\_$(date +%Y%m%d).sql
 ```
 
 ### Restaurar base de datos
 
 ```bash
 # Método 1: Desde archivo
-docker-compose exec -T postgres psql -U postgres finanzas_db < backup.sql
+docker-compose exec -T postgres psql -U postgres finanzas\_db < backup.sql
 
 # Método 2: Copiar archivo al contenedor
-docker cp backup.sql finanzas_db:/backup.sql
-docker-compose exec postgres psql -U postgres finanzas_db -f /backup.sql
+docker cp backup.sql finanzas\_db:/backup.sql
+docker-compose exec postgres psql -U postgres finanzas\_db -f /backup.sql
 ```
 
 ### Ejecutar SQL directamente
 
 ```bash
-docker-compose exec postgres psql -U postgres -d finanzas_db -c "SELECT * FROM transacciones LIMIT 5;"
+docker-compose exec postgres psql -U postgres -d finanzas\_db -c "SELECT \* FROM transacciones LIMIT 5;"
 ```
 
 ### Reiniciar base de datos
@@ -239,7 +245,8 @@ docker-compose up -d
 ### Configuración para red local
 
 1. **Obtener tu IP local:**
-   ```bash
+
+```bash
    # Windows
    ipconfig
    
@@ -248,17 +255,20 @@ docker-compose up -d
    ```
 
 2. **Actualizar `.env`:**
-   ```env
-   REACT_APP_API_URL=http://192.168.1.100:3001/api
+
+```env
+   REACT\_APP\_API\_URL=http://192.168.1.100:3001/api
    ```
 
 3. **Reconstruir frontend:**
-   ```bash
+
+```bash
    docker-compose up --build frontend
    ```
 
 4. **Acceder desde dispositivo móvil:**
-   ```
+
+```
    http://192.168.1.100:8000
    ```
 
@@ -271,8 +281,8 @@ docker-compose up -d
 docker login
 
 # Tag de imágenes
-docker tag dashboard-financiero_backend tu-usuario/finanzas-backend:latest
-docker tag dashboard-financiero_frontend tu-usuario/finanzas-frontend:latest
+docker tag dashboard-financiero\_backend tu-usuario/finanzas-backend:latest
+docker tag dashboard-financiero\_frontend tu-usuario/finanzas-frontend:latest
 
 # Push
 docker push tu-usuario/finanzas-backend:latest
@@ -300,8 +310,9 @@ docker-compose logs -f
 ### Usar dominio propio
 
 Actualizar `.env`:
+
 ```env
-REACT_APP_API_URL=https://api.tu-dominio.com/api
+REACT\_APP\_API\_URL=https://api.tu-dominio.com/api
 ```
 
 Configurar nginx reverse proxy o usar Traefik.
@@ -311,10 +322,12 @@ Configurar nginx reverse proxy o usar Traefik.
 ### Error: "Cannot connect to the Docker daemon"
 
 **Windows/Mac:**
-- Abrir Docker Desktop
-- Esperar a que inicie completamente
+
+* Abrir Docker Desktop
+* Esperar a que inicie completamente
 
 **Linux:**
+
 ```bash
 sudo systemctl start docker
 sudo systemctl enable docker
@@ -323,23 +336,25 @@ sudo systemctl enable docker
 ### Error: "port is already allocated"
 
 Cambiar puertos en `.env`:
+
 ```env
-FRONTEND_PORT=3000
-BACKEND_PORT=4000
-POSTGRES_PORT=5433
+FRONTEND\_PORT=3000
+BACKEND\_PORT=4000
+POSTGRES\_PORT=5433
 ```
 
 ### El frontend no conecta con el backend
 
 1. Verificar que el backend esté corriendo:
-   ```bash
+
+```bash
    curl http://localhost:3001/api/health
    ```
 
-2. Verificar REACT_APP_API_URL en `.env`
-
+2. Verificar REACT\_APP\_API\_URL en `.env`
 3. Reconstruir frontend:
-   ```bash
+
+```bash
    docker-compose up --build frontend
    ```
 
@@ -361,7 +376,7 @@ docker-compose up -d
 docker-compose down -v
 
 # Eliminar imágenes
-docker rmi dashboard-financiero_backend dashboard-financiero_frontend
+docker rmi dashboard-financiero\_backend dashboard-financiero\_frontend
 
 # Limpiar sistema Docker (cuidado: elimina TODOS los recursos no usados)
 docker system prune -a
@@ -379,7 +394,7 @@ docker-compose up --build
 docker stats
 
 # Uso de un contenedor específico
-docker stats finanzas_backend
+docker stats finanzas\_backend
 ```
 
 ### Ver tamaño de imágenes
@@ -391,21 +406,23 @@ docker images
 ### Optimizar tamaño de imágenes
 
 Las imágenes ya están optimizadas usando:
-- Alpine Linux (imagen base mínima)
-- Multi-stage builds (frontend)
-- .dockerignore para excluir archivos innecesarios
+
+* Alpine Linux (imagen base mínima)
+* Multi-stage builds (frontend)
+* .dockerignore para excluir archivos innecesarios
 
 ## 🔒 Seguridad
 
 ### Cambiar contraseñas en producción
 
 ```env
-DB_PASSWORD=contraseña_super_segura_y_larga_123!
+DB\_PASSWORD=contraseña\_super\_segura\_y\_larga\_123!
 ```
 
 ### No exponer PostgreSQL en producción
 
 En `docker-compose.yml`, comentar:
+
 ```yaml
 # ports:
 #   - "5432:5432"
@@ -417,9 +434,9 @@ Usar Docker secrets o servicios como AWS Secrets Manager.
 
 ## 📚 Recursos Adicionales
 
-- [Documentación de Docker](https://docs.docker.com/)
-- [Docker Compose Reference](https://docs.docker.com/compose/compose-file/)
-- [Best Practices](https://docs.docker.com/develop/dev-best-practices/)
+* [Documentación de Docker](https://docs.docker.com/)
+* [Docker Compose Reference](https://docs.docker.com/compose/compose-file/)
+* [Best Practices](https://docs.docker.com/develop/dev-best-practices/)
 
 ## 🆘 Soporte
 
@@ -430,6 +447,7 @@ Si tienes problemas:
 3. Buscar en [Issues del repositorio](https://github.com/tu-usuario/dashboard-financiero/issues)
 4. Crear un nuevo Issue con detalles
 
----
+\---
 
 **¡Feliz Dockerización! 🐳**
+
